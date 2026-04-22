@@ -80,7 +80,7 @@ export const ProjectCarousel: React.FC = () => {
     return (
       <div className="w-full h-96 flex items-center justify-center">
         <div className="animate-pulse space-y-4 w-full max-w-4xl">
-          <div className="h-96 bg-[#111111]/40 rounded-3xl border border-white/10" />
+          <div className="h-96 bg-[var(--bg)]/40 rounded-3xl border border-[var(--text)]/10" />
         </div>
       </div>
     );
@@ -90,8 +90,8 @@ export const ProjectCarousel: React.FC = () => {
     return (
       <div className="w-full h-96 flex items-center justify-center">
         <div className="text-center">
-          <p className="text-white/60 mb-4">No hay proyectos disponibles</p>
-          <p className="text-white/40 text-sm">Los proyectos aparecerán aquí una vez que se agreguen a la base de datos</p>
+          <p className="text-[var(--text)]/60 mb-4">No hay proyectos disponibles</p>
+          <p className="text-[var(--text)]/40 text-sm">Los proyectos aparecerán aquí una vez que se agreguen a la base de datos</p>
         </div>
       </div>
     );
@@ -133,7 +133,7 @@ export const ProjectCarousel: React.FC = () => {
                   target.src = "https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?q=80&w=800&auto=format&fit=crop";
                 }}
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#111111] via-[#111111]/60 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg)] via-[var(--bg)]/60 to-transparent" />
             </div>
           </motion.div>
         )}
@@ -162,7 +162,7 @@ export const ProjectCarousel: React.FC = () => {
                   target.src = "https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?q=80&w=800&auto=format&fit=crop";
                 }}
               />
-              <div className="absolute inset-0 bg-linear-to-t from-[#111111] via-[#111111]/60 to-transparent" />
+              <div className="absolute inset-0 bg-linear-to-t from-[var(--bg)] via-[var(--bg)]/60 to-transparent" />
             </div>
           </motion.div>
         )}
@@ -187,14 +187,14 @@ export const ProjectCarousel: React.FC = () => {
 
 
         {/* Barra de progreso y navegación */}
-        <div className="absolute -bottom-20 left-1/2 -translate-x-1/2 flex items-center gap-4 bg-[#111111]/80 backdrop-blur-xl border border-white/20 rounded-full px-6 py-3 z-20">
+        <div className="absolute -bottom-20 left-1/2 -translate-x-1/2 flex items-center gap-4 bg-[var(--bg)]/80 backdrop-blur-xl border border-[var(--text)]/20 rounded-full px-6 py-3 z-20">
           {/* Botón Previous */}
           <motion.button
             onClick={() => {
               goToPreviousProject();
               handleUserInteraction();
             }}
-            className="text-white/60 hover:text-white transition-colors duration-200"
+            className="text-[var(--text)]/60 hover:text-[var(--text)] transition-colors duration-200"
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
             aria-label="Proyecto anterior"
@@ -204,14 +204,14 @@ export const ProjectCarousel: React.FC = () => {
 
           {/* Barra de progreso */}
           <div className="flex items-center gap-2">
-            <div className="w-32 h-1 bg-white/20 rounded-full overflow-hidden">
+            <div className="w-32 h-1 bg-[var(--text)]/20 rounded-full overflow-hidden">
               <motion.div
-                className="h-full bg-[#e0c4ff] rounded-full"
+                className="h-full bg-[var(--primary)] rounded-full"
                 animate={{ width: `${progress * 100}%` }}
                 transition={{ duration: 0.05, ease: "linear" }}
               />
             </div>
-            <span className="text-white/60 text-xs font-medium min-w-[3rem]">
+            <span className="text-[var(--text)]/60 text-xs font-medium min-w-[3rem]">
               {Math.ceil((1 - progress) * 10)}s
             </span>
           </div>
@@ -222,7 +222,7 @@ export const ProjectCarousel: React.FC = () => {
               goToNextProject();
               handleUserInteraction();
             }}
-            className="text-white/60 hover:text-white transition-colors duration-200"
+            className="text-[var(--text)]/60 hover:text-[var(--text)] transition-colors duration-200"
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
             aria-label="Siguiente proyecto"
@@ -242,8 +242,8 @@ export const ProjectCarousel: React.FC = () => {
               }}
               className={`w-1 h-1 rounded-full transition-all duration-300 ${
                 index === currentIndex 
-                  ? "bg-white/80 w-4" 
-                  : "bg-white/20 hover:bg-white/40"
+                  ? "bg-[var(--text)]/80 w-4" 
+                  : "bg-[var(--text)]/20 hover:bg-[var(--text)]/40"
               }`}
               whileHover={{ scale: 1.2 }}
               whileTap={{ scale: 0.8 }}

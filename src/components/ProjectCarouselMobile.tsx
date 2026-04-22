@@ -78,7 +78,7 @@ export const ProjectCarouselMobile: React.FC = () => {
     return (
       <div className="w-full h-64 flex items-center justify-center">
         <div className="animate-pulse space-y-4 w-full max-w-4xl">
-          <div className="h-64 bg-[#111111]/40 rounded-3xl border border-white/10" />
+          <div className="h-64 bg-[var(--bg)]/40 rounded-3xl border border-[var(--text)]/10" />
         </div>
       </div>
     );
@@ -88,8 +88,8 @@ export const ProjectCarouselMobile: React.FC = () => {
     return (
       <div className="w-full h-64 flex items-center justify-center">
         <div className="text-center">
-          <p className="text-white/60 mb-4">No hay proyectos disponibles</p>
-          <p className="text-white/40 text-sm">Los proyectos aparecerán aquí una vez que se agreguen a la base de datos</p>
+          <p className="text-[var(--text)]/60 mb-4">No hay proyectos disponibles</p>
+          <p className="text-[var(--text)]/40 text-sm">Los proyectos aparecerán aquí una vez que se agreguen a la base de datos</p>
         </div>
       </div>
     );
@@ -128,7 +128,7 @@ export const ProjectCarouselMobile: React.FC = () => {
                 target.src = "https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?q=80&w=800&auto=format&fit=crop";
               }}
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#111111] via-[#111111]/80 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg)] via-[var(--bg)]/80 to-transparent" />
           </motion.div>
         )}
 
@@ -153,7 +153,7 @@ export const ProjectCarouselMobile: React.FC = () => {
                 target.src = "https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?q=80&w=800&auto=format&fit=crop";
               }}
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#111111] via-[#111111]/80 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg)] via-[var(--bg)]/80 to-transparent" />
           </motion.div>
         )}
 
@@ -176,14 +176,14 @@ export const ProjectCarouselMobile: React.FC = () => {
         </AnimatePresence>
 
         {/* Barra de progreso y navegación simplificada */}
-        <div className="absolute -bottom-12 left-1/2 -translate-x-1/2 flex items-center gap-3 bg-[#111111]/80 backdrop-blur-xl border border-white/20 rounded-full px-4 py-2 z-20">
+        <div className="absolute -bottom-12 left-1/2 -translate-x-1/2 flex items-center gap-3 bg-[var(--bg)]/80 backdrop-blur-xl border border-[var(--text)]/20 rounded-full px-4 py-2 z-20">
           {/* Botón Previous */}
           <motion.button
             onClick={() => {
               goToPreviousProject();
               handleUserInteraction();
             }}
-            className="text-white/60 hover:text-white transition-colors duration-200"
+            className="text-[var(--text)]/60 hover:text-[var(--text)] transition-colors duration-200"
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
             aria-label="Proyecto anterior"
@@ -193,14 +193,14 @@ export const ProjectCarouselMobile: React.FC = () => {
 
           {/* Barra de progreso */}
           <div className="flex items-center gap-2">
-            <div className="w-24 h-1 bg-white/20 rounded-full overflow-hidden">
+            <div className="w-24 h-1 bg-[var(--text)]/20 rounded-full overflow-hidden">
               <motion.div
-                className="h-full bg-[#e0c4ff] rounded-full"
+                className="h-full bg-[var(--primary)] rounded-full"
                 animate={{ width: `${progress * 100}%` }}
                 transition={{ duration: 0.05, ease: "linear" }}
               />
             </div>
-            <span className="text-white/60 text-xs font-medium min-w-8">
+            <span className="text-[var(--text)]/60 text-xs font-medium min-w-8">
               {Math.ceil((1 - progress) * 10)}s
             </span>
           </div>
@@ -211,7 +211,7 @@ export const ProjectCarouselMobile: React.FC = () => {
               goToNextProject();
               handleUserInteraction();
             }}
-            className="text-white/60 hover:text-white transition-colors duration-200"
+            className="text-[var(--text)]/60 hover:text-[var(--text)] transition-colors duration-200"
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
             aria-label="Siguiente proyecto"
@@ -231,8 +231,8 @@ export const ProjectCarouselMobile: React.FC = () => {
               }}
               className={`w-1 h-1 rounded-full transition-all duration-300 ${
                 index === currentIndex 
-                  ? "bg-white/60 w-3" 
-                  : "bg-white/15 hover:bg-white/30"
+                  ? "bg-[var(--text)]/60 w-3" 
+                  : "bg-[var(--text)]/15 hover:bg-[var(--text)]/30"
               }`}
               whileHover={{ scale: 1.2 }}
               whileTap={{ scale: 0.8 }}

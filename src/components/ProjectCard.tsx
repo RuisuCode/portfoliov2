@@ -36,8 +36,8 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, isActive = fa
   return (
     <>
       <motion.div
-        className={`relative w-full max-w-4xl mx-auto h-[500px] rounded-3xl overflow-hidden shadow-2xl border border-white/10 bg-[#111111]/40 backdrop-blur-xl ${
-          isActive ? "ring-2 ring-[#e0c4ff] ring-offset-2 ring-offset-[#111111]" : ""
+        className={`relative w-full max-w-4xl mx-auto h-[500px] rounded-3xl overflow-hidden shadow-2xl border border-[var(--text)]/10 bg-[var(--bg)]/40 backdrop-blur-xl ${
+          isActive ? "ring-2 ring-[var(--primary)] ring-offset-2 ring-offset-[var(--bg)]" : ""
         }`}
         initial={{ opacity: 0, scale: 0.9, y: 50 }}
         animate={{ 
@@ -53,7 +53,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, isActive = fa
         }}
         whileHover={{ 
           scale: isActive ? 1.02 : 1,
-          borderColor: "rgba(224, 196, 255, 0.3)",
+          borderColor: "rgba(124, 77, 255, 0.3)",
           transition: { duration: 0.3 },
           cursor: "pointer"
         }}
@@ -71,7 +71,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, isActive = fa
           }}
         />
         {/* Overlay gradiente */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#111111] via-[#111111]/60 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg)] via-[var(--bg)]/60 to-transparent" />
       </div>
 
       {/* Contenido */}
@@ -81,7 +81,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, isActive = fa
           <div className="flex items-end justify-between w-full">
             {/* Izquierda: Título y estado */}
             <div className="flex flex-col">
-              <h3 className="text-4xl md:text-5xl font-bold text-white leading-tight mb-3">
+              <h3 className="text-4xl md:text-5xl font-bold text-[var(--text)] leading-tight mb-3">
                 {project.name}
               </h3>
               <div className="flex items-center gap-3">
@@ -89,8 +89,8 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, isActive = fa
                 <span className={`text-xs font-medium text-${statusColors[project.status]}`}>
                   {statusLabels[project.status]}
                 </span>
-                <span className="text-white/50 text-xs">·</span>
-                <span className="text-white/60 text-xs">
+                <span className="text-[var(--text)]/50 text-xs">·</span>
+                <span className="text-[var(--text)]/60 text-xs">
                   {project.launch_date ? new Date(project.launch_date).toLocaleDateString('es-ES', {
                     year: 'numeric',
                     month: 'short',
@@ -106,7 +106,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, isActive = fa
                 {project.technologies?.slice(0, 4).map((tech) => (
                   <div
                     key={tech.id}
-                    className="w-10 h-10 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center overflow-hidden group hover:bg-white/20 transition-colors duration-200"
+                    className="w-10 h-10 rounded-xl bg-[var(--text)]/10 backdrop-blur-sm border border-[var(--text)]/20 flex items-center justify-center overflow-hidden group hover:bg-[var(--text)]/20 transition-colors duration-200"
                     title={tech.name}
                   >
                     {tech.icon_url ? (
@@ -116,21 +116,21 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project, isActive = fa
                         className="w-6 h-6 object-contain filter brightness-100 group-hover:brightness-110 transition-all duration-200"
                       />
                     ) : (
-                      <span className="text-[8px] uppercase tracking-widest text-white/50 font-bold">
+                      <span className="text-[8px] uppercase tracking-widest text-[var(--text)]/50 font-bold">
                         {tech.name.slice(0, 2)}
                       </span>
                     )}
                   </div>
                 ))}
                 {project.technologies && project.technologies.length > 4 && (
-                  <div className="w-10 h-10 rounded-xl bg-[#e0c4ff]/20 backdrop-blur-sm border border-[#e0c4ff]/30 flex items-center justify-center">
-                    <span className="text-xs text-[#e0c4ff] font-bold">
+                  <div className="w-10 h-10 rounded-xl bg-[var(--primary)]/20 backdrop-blur-sm border border-[var(--primary)]/30 flex items-center justify-center">
+                    <span className="text-xs text-[var(--primary)] font-bold">
                       +{project.technologies.length - 4}
                     </span>
                   </div>
                 )}
               </div>
-              <span className="text-white/70 text-sm">
+              <span className="text-[var(--text)]/70 text-sm">
                 Click para más detalles
               </span>
             </div>

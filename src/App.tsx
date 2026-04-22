@@ -6,9 +6,10 @@ import { supabase } from "../utils/supabase";
 import { ArrowUpRight, BookOpenText, BookText, Moon, Sun } from "lucide-react";
 import { ProjectCarousel } from "./components/ProjectCarousel";
 import { ProjectCarouselMobile } from "./components/ProjectCarouselMobile";
+import ContactForm from "./components/ContactForm";
+import profile from "../public/assets/foto_perfil_2.jpg";
 
 import { useModalStore } from "./store/useModalStore";
-import { toast } from "sonner";
 
 type TechnologyLevel = "low" | "mid" | "high" | "very_high";
 type CategoryType =
@@ -195,48 +196,16 @@ export default function Portfolio() {
   const [scrollProgress, setScrollProgress] = useState(0);
   const [showActiveToast, setShowActiveToast] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(true);
-  const [isEyeCareMode, setIsEyeCareMode] = useState(false);
   const [isBioExpanded, setIsBioExpanded] = useState(false);
+  const [isEyeCareMode, setIsEyeCareMode] = useState(false);
+
+  // Theme Colors based on user request
+  const primaryColor = isDarkMode ? "#e0c4ff" : "#7C4DFF";
+  const secondaryColor = isDarkMode ? "#240046" : "#7C4DFF";
+  const tertiaryColor = "#FFAB91"; // Requested tertiary
+  const bgColor = isDarkMode ? "#111111" : "#E0E0E0";
+  const textColor = isDarkMode ? "#ffffff" : "#0f0f0f";
   const { isModalOpen } = useModalStore();
-  const [showEmailPicker, setShowEmailPicker] = useState(false);
-  const [contactForm, setContactForm] = useState({
-    name: "",
-    subject: "",
-    message: "",
-  });
-
-  const handleSendMessage = () => {
-    if (!contactForm.name || !contactForm.message) {
-      toast.error("Por favor completa tu nombre y el mensaje.");
-      return;
-    }
-    setShowEmailPicker(!showEmailPicker);
-  };
-
-  const openEmailProvider = (provider: "gmail" | "outlook" | "native") => {
-    const email = "theboss7lol@gmail.com";
-    const subject = encodeURIComponent(
-      contactForm.subject || "Consulta desde Portfolio",
-    );
-    const body = encodeURIComponent(
-      `Hola,\n\nSoy ${contactForm.name}.\n\n${contactForm.message}`,
-    );
-
-    const links = {
-      gmail: `https://mail.google.com/mail/?view=cm&fs=1&to=${email}&su=${subject}&body=${body}`,
-      outlook: `https://outlook.office.com/mail/deeplink/compose?to=${email}&subject=${subject}&body=${body}`,
-      native: `mailto:${email}?subject=${subject}&body=${body}`,
-    };
-
-    // if (provider === "copy") {
-    //   navigator.clipboard.writeText(email);
-    //   alert("Email copiado al portapapeles");
-    // } else {
-    //   window.open(links[provider], "_blank");
-    // }
-    window.open(links[provider], "_blank");
-    setShowEmailPicker(false);
-  };
 
   const {
     data: technologies = [],
@@ -321,10 +290,21 @@ export default function Portfolio() {
 
   return (
     <div
+      style={
+        {
+          "--primary": primaryColor,
+          "--secondary": secondaryColor,
+          "--tertiary": tertiaryColor,
+          "--bg": bgColor,
+          "--text": textColor,
+        } as React.CSSProperties
+      }
       className={[
-        "relative min-h-screen flex flex-col items-center justify-center overflow-hidden font-sans",
-        "selection:bg-[#240046] selection:text-white",
-        isDarkMode ? "bg-[#111111] text-white" : "bg-[#fafafa] text-[#0f0f0f]",
+        "relative min-h-screen flex flex-col items-center justify-center overflow-hidden font-sans transition-colors duration-500",
+        isDarkMode
+          ? "selection:bg-[#240046] selection:text-white"
+          : "selection:bg-[#448AFF] selection:text-white",
+        "bg-[var(--bg)] text-[var(--text)]",
       ].join(" ")}
     >
       {/* Animated Background Gradient */}
@@ -335,8 +315,7 @@ export default function Portfolio() {
           height: "120vw",
           minWidth: "800px",
           minHeight: "800px",
-          background:
-            "radial-gradient(circle, #240046 0%, rgba(17,17,17,0) 60%)",
+          background: `radial-gradient(circle, var(--secondary) 0%, ${isDarkMode ? "rgba(17,17,17,0)" : "rgba(224,224,224,0)"} 60%)`,
           filter: "blur(100px)",
         }}
         animate={{
@@ -455,7 +434,7 @@ export default function Portfolio() {
           }}
           transition={{ duration: 0.25, ease: "easeOut" }}
         >
-          <div className="backdrop-blur-xl bg-[#111111]/60 border border-white/10 rounded-full px-4 py-2 text-[11px] tracking-[0.22em] uppercase font-bold text-[#e0c4ff]">
+          <div className="backdrop-blur-xl bg-[var(--bg)]/60 border border-[var(--text)]/10 rounded-full px-4 py-2 text-[11px] tracking-[0.22em] uppercase font-bold text-[var(--primary)]">
             {activeSection}
           </div>
         </motion.div>
@@ -484,12 +463,12 @@ export default function Portfolio() {
                   transition={{ type: "spring", stiffness: 500, damping: 40 }}
                 >
                   <span
-                    className={`text-[10px] tracking-[0.2em] capitalize ${item === activeSection ? "text-[#e0c4ff]" : "text-transparent group-hover:text-white/40 transition-colors duration-300"} font-bold`}
+                    className={`text-[10px] tracking-[0.2em] capitalize ${item === activeSection ? "text-[var(--primary)]" : "text-transparent group-hover:text-[var(--text)]/40 transition-colors duration-300"} font-bold`}
                   >
                     {item}
                   </span>
                   <div
-                    className={`w-2 h-2 rounded-full ${item === activeSection ? "bg-[#e0c4ff] w-3 h-3 shadow-[0_0_12px_rgba(224,196,255,0.8)]" : "bg-white/20 group-hover:bg-white/40 transition-colors duration-300 mr-[2px]"}`}
+                    className={`w-2 h-2 rounded-full ${item === activeSection ? "bg-[var(--primary)] w-3 h-3 shadow-[0_0_12px_var(--primary)]" : "bg-[var(--text)]/20 group-hover:bg-[var(--text)]/40 transition-colors duration-300 mr-[2px]"}`}
                   />
                 </motion.div>
               );
@@ -508,7 +487,8 @@ export default function Portfolio() {
         <div id="biografia" className="w-full relative scroll-mt-32">
           <div className="text-center mb-16">
             <h1 className="text-5xl md:text-7xl font-bold tracking-tight">
-              Hi, I am <span className="text-[#e0c4ff] ">Luis Campos</span>
+              Hola, soy{" "}
+              <span className="text-[var(--primary)] ">Luis Campos</span>
             </h1>
           </div>
 
@@ -517,7 +497,7 @@ export default function Portfolio() {
             {!isBioExpanded && (
               <motion.div
                 layoutId="bio-card"
-                className="group bg-[#111111]/40 backdrop-blur-xl rounded-3xl border border-white/10 p-8 md:p-16 text-center shadow-[0_0_18px_rgba(0,0,0,0.16)] relative overflow-hidden transition-all duration-300"
+                className="group bg-[var(--bg)]/40 backdrop-blur-xl rounded-3xl border border-[var(--text)]/10 p-8 md:p-16 text-center shadow-[0_0_18px_rgba(0,0,0,0.16)] relative overflow-hidden transition-all duration-300"
                 whileHover={{ borderColor: "rgba(255,255,255,0.22)" }}
                 transition={{ type: "tween", duration: 0.25, ease: "easeOut" }}
               >
@@ -528,15 +508,15 @@ export default function Portfolio() {
                   className="relative w-full h-full"
                 >
                   {/* Subtle inner highlight */}
-                  <div className="absolute top-0 left-0 right-0 h-1px bg-linear-to-r from-transparent via-white/10 to-transparent" />
+                  <div className="absolute top-0 left-0 right-0 h-1px bg-linear-to-r from-transparent via-[var(--text)]/10 to-transparent" />
 
-                  <p className="text-xs tracking-[0.3em] text-white/40 uppercase mb-8">
+                  <p className="text-xs tracking-[0.3em] text-[var(--text)]/40 uppercase mb-8">
                     Carta de presentación
                   </p>
 
-                  <p className="text-lg md:text-2xl text-white/70 leading-relaxed font-light max-w-3xl mx-auto mb-16">
+                  <p className="text-lg md:text-2xl text-[var(--text)]/70 leading-relaxed font-light max-w-3xl mx-auto mb-16">
                     Desarrollador con experiencia tanto{" "}
-                    <strong className="text-white font-medium">
+                    <strong className="text-[var(--text)] font-medium">
                       académica como laboral
                     </strong>
                     . Un profesional proactivo con facilidad de comunicación en
@@ -546,20 +526,20 @@ export default function Portfolio() {
                   </p>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16 relative">
-                    <div className="absolute top-0 bottom-0 left-1/2 w-1px bg-white/5 hidden md:block" />
+                    <div className="absolute top-0 bottom-0 left-1/2 w-1px bg-[var(--text)]/5 hidden md:block" />
                     <div>
-                      <p className="text-xs tracking-[0.2em] text-white/40 uppercase mb-3">
+                      <p className="text-xs tracking-[0.2em] text-[var(--text)]/40 uppercase mb-3">
                         Ubicación
                       </p>
-                      <p className="text-white/90 font-medium">
+                      <p className="text-[var(--text)]/90 font-medium">
                         Venezuela, VE / Remote GMT-4
                       </p>
                     </div>
                     <div>
-                      <p className="text-xs tracking-[0.2em] text-white/40 uppercase mb-3">
+                      <p className="text-xs tracking-[0.2em] text-[var(--text)]/40 uppercase mb-3">
                         Enfoque
                       </p>
-                      <p className="text-white/90 font-medium">
+                      <p className="text-[var(--text)]/90 font-medium">
                         Full Stack Developer & AI Cloud Engineer
                       </p>
                     </div>
@@ -568,7 +548,7 @@ export default function Portfolio() {
                   <div className="flex flex-col sm:flex-row justify-center gap-6">
                     <button
                       onClick={() => setIsBioExpanded(true)}
-                      className=" text-[#111111]  bg-[#e0c4ff] px-8 py-4 rounded-xl text-xs font-bold tracking-widest uppercase hover:bg-white/90 hover:scale-105 active:scale-95 transition-all duration-300"
+                      className=" text-[var(--bg)] bg-[var(--primary)] px-8 py-4 rounded-xl text-xs font-bold tracking-widest uppercase hover:opacity-90 hover:scale-105 active:scale-95 transition-all duration-300"
                     >
                       Leer Biografía
                     </button>
@@ -587,8 +567,8 @@ export default function Portfolio() {
                 ?.scrollIntoView({ behavior: "smooth", block: "start" })
             }
           >
-            <div className="h-20 w-[1px] bg-linear-to-b from-white/20 to-transparent" />
-            <div className="text-[10px] md:text-xs font-bold uppercase tracking-[0.3em] text-[#e0c4ff]">
+            <div className="h-20 w-[1px] bg-linear-to-b from-[var(--text)]/20 to-transparent" />
+            <div className="text-[10px] md:text-xs font-bold uppercase tracking-[0.3em] text-[var(--primary)]">
               Formación
             </div>
           </div>
@@ -606,53 +586,86 @@ export default function Portfolio() {
                 ?.scrollIntoView({ behavior: "smooth", block: "start" })
             }
           >
-            <div className="text-[10px] md:text-xs font-bold uppercase tracking-[0.3em] text-white/40">
+            <div className="text-[10px] md:text-xs font-bold uppercase tracking-[0.3em] text-[var(--text)]/40">
               Biografía
             </div>
             <div className="h-20 w-[1px] bg-linear-to-t from-white/20 to-transparent" />
           </div>
 
-          <div className="text-center mb-20 md:mb-32">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            className="text-center mb-20 md:mb-32"
+          >
             <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight">
               Formación{" "}
               <span className="relative inline-block">
                 Académica
-                <div className="absolute -bottom-3 left-0 right-0 h-[3px] bg-[#e0c4ff]/40 rounded-full" />
+                <div className="absolute -bottom-3 left-0 right-0 h-[3px] bg-[var(--primary)]/40 rounded-full" />
               </span>{" "}
               y Cursos
             </h2>
-          </div>
+          </motion.div>
 
           <div className="relative max-w-4xl mx-auto mb-32 px-4 md:px-0">
             {/* The Timeline Vertical Line */}
-            <div className="absolute left-[39px] md:left-1/2 top-4 bottom-4 w-px bg-white/10 md:-translate-x-1/2" />
+            <motion.div
+              initial={{ scaleY: 0 }}
+              whileInView={{ scaleY: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 1.5, ease: "easeInOut" }}
+              style={{ originY: 0 }}
+              className="absolute left-[39px] md:left-1/2 top-4 bottom-4 w-px bg-[var(--text)]/10 md:-translate-x-1/2"
+            />
 
             {[
               {
-                year: "2018 — 2021",
-                title: "Licenciatura en Ciencias de la Comunicación",
-                institution: "Universidad Nacional Autónoma de México",
-                detail: "ESPECIALIDAD EN PERIODISMO DIGITAL",
+                year: "2013 — 2018",
+                title: "Bachiller en ciencias",
+                institution: "U.E.C.A Dr Braulio Perez Marcio, Maturín",
+                // detail: "ESPECIALIDAD EN PERIODISMO DIGITAL",
                 align: "left",
                 primary: true,
               },
               {
-                year: "OCTUBRE 2022",
-                title: "Diseño de Interfaces Avanzado",
-                institution: "Interaction Design Foundation (IxDF)",
+                year: "2018 — 2019",
+                title: "Ingeniería en Sistemas",
+                institution: "Instituto Universitario Politecnico Santiago Mariño",
                 align: "right",
               },
               {
-                year: "MARZO 2022",
-                title: "Arquitectura de Información",
-                institution: "Coursera & University of Michigan",
+                year: "Noviembre 2021",
+                title: "Diploma Ingles A1 — A2",
+                institution: "Liceo Ildefonso Nuñez Mares, Maturín",
                 align: "left",
               },
               {
-                year: "2013 — 2016",
-                title: "Bachillerato",
-                institution: "Colegio Nacional de Educación Profesional",
+                year: "Febrero 2022",
+                title: "Diploma Ingles B1",
+                institution: "Liceo Ildefonso Nuñez Mares, Maturín",
                 align: "right",
+              },
+              {
+                year: "Noviembre 2022",
+                title: "Diploma Introduccion a PHP",
+                institution: "Infocentro Colegio Uruguay, Maturín",
+                align: "left",
+              },
+              {
+                year: "2022 — 2025",
+                title: "Tecnico Superior Universitario en Informatica",
+                institution: "Universidad Bolivariana De Venezuela, Maturín",
+                detail: "Finalizado",
+                align: "right",
+              },
+              {
+                year: "2025 — Presente",
+                title: "Licenciatura en Informatica",
+                institution: "Universidad Bolivariana De Venezuela, Maturín",
+                detail: "En curso",
+                align: "left",
               },
             ].map((item, idx) => {
               const isLeft = item.align === "left";
@@ -669,17 +682,17 @@ export default function Portfolio() {
                   <div
                     className={`w-full md:w-[45%] pl-24 md:pl-0 transition-all duration-500 ease-out group-hover:scale-[1.03] ${isLeft ? "md:text-right md:pr-16 md:group-hover:-translate-x-2" : "md:text-left md:pl-16 md:group-hover:translate-x-2"}`}
                   >
-                    <p className="text-[10px] tracking-[0.2em] text-[#e0c4ff]/70 uppercase mb-3 font-semibold transition-colors duration-300 group-hover:text-[#e0c4ff]">
+                    <p className="text-[10px] tracking-[0.2em] text-[var(--primary)] uppercase mb-3 font-semibold transition-colors duration-300">
                       {item.year}
                     </p>
-                    <h3 className="text-xl md:text-2xl font-bold mb-2 leading-snug transition-colors duration-300 group-hover:text-white group-hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.3)]">
+                    <h3 className="text-xl md:text-2xl font-bold mb-2 leading-snug transition-colors duration-300 group-hover:text-[var(--text)]">
                       {item.title}
                     </h3>
-                    <p className="text-white/60 font-light text-sm md:text-base transition-colors duration-300 group-hover:text-white/80">
+                    <p className="text-[var(--text)]/60 font-light text-sm md:text-base transition-colors duration-300 group-hover:text-[var(--text)]/80">
                       {item.institution}
                     </p>
                     {item.detail && (
-                      <p className="text-[9px] tracking-[0.2em] text-white/30 uppercase mt-4 block md:inline-block transition-colors duration-300 group-hover:text-[#e0c4ff]/50">
+                      <p className="text-[9px] tracking-[0.2em] text-[var(--text)]/30 uppercase mt-4 block md:inline-block transition-colors duration-300 group-hover:text-[var(--primary)]/50">
                         {item.detail}
                       </p>
                     )}
@@ -688,10 +701,10 @@ export default function Portfolio() {
                   {/* Center Dot */}
                   <div className="absolute left-[32px] md:left-1/2 top-1 md:top-1/2 md:-translate-y-1/2 w-4 h-8 md:-translate-x-1/2 flex items-center justify-center z-10 bg-transparent">
                     <div
-                      className={`w-3 h-3 rounded-full transition-all duration-500 ease-out group-hover:scale-[2.5] group-hover:shadow-[0_0_24px_rgba(224,196,255,0.8)] group-hover:bg-[#e0c4ff] ${
+                      className={`w-3 h-3 rounded-full transition-all duration-500 ease-out group-hover:scale-[2.5] group-hover:shadow-[0_0_24px_var(--primary)] group-hover:bg-[var(--primary)] ${
                         item.primary
-                          ? "bg-[#e0c4ff] shadow-[0_0_16px_rgba(224,196,255,0.6)]"
-                          : "bg-[#e0c4ff]/40"
+                          ? "bg-[var(--primary)] shadow-[0_0_16px_var(--primary)]"
+                          : "bg-[var(--primary)]/40"
                       }`}
                     />
                   </div>
@@ -706,19 +719,25 @@ export default function Portfolio() {
           {/* Cards at the bottom */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto px-4 md:px-0">
             {/* Filosofia Card */}
-            <div className="bg-[#111111]/40 backdrop-blur-xl rounded-[2rem] border border-white/5 p-8 md:p-12 relative overflow-hidden group hover:border-white/10 transition-all duration-300 shadow-2xl">
-              <p className="text-[10px] tracking-[0.2em] text-[#e0c4ff]/80 uppercase mb-4 font-bold">
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="bg-[var(--bg)]/40 backdrop-blur-xl rounded-[2rem] border border-[var(--text)]/5 p-8 md:p-12 relative overflow-hidden group hover:border-[var(--text)]/10 transition-all duration-300 shadow-2xl"
+            >
+              <p className="text-[10px] tracking-[0.2em] text-[var(--primary)] uppercase mb-4 font-bold">
                 FILOSOFÍA
               </p>
               <h4 className="text-2xl md:text-3xl font-bold mb-6">
                 Aprendizaje Perpetuo
               </h4>
-              <p className="text-white/60 font-light text-sm md:text-base leading-relaxed max-w-sm">
+              <p className="text-[var(--text)]/60 font-light text-sm md:text-base leading-relaxed max-w-sm">
                 Cada curso y título representa un nodo en una red de
                 conocimiento en constante expansión, centrada en la intersección
                 de la tecnología y la humanidad.
               </p>
-              <div className="absolute -bottom-10 -right-10 opacity-[0.03] text-white rotate-[-15deg] group-hover:scale-110 transition-transform duration-500">
+              <div className="absolute -bottom-10 -right-10 opacity-[0.03] text-[var(--text)] rotate-[-15deg] group-hover:scale-110 transition-transform duration-500">
                 <svg
                   width="200"
                   height="200"
@@ -733,26 +752,32 @@ export default function Portfolio() {
                   <path d="M6 12v5c3 3 9 3 12 0v-5" />
                 </svg>
               </div>
-            </div>
+            </motion.div>
 
             {/* Ubicacion Card */}
-            <div className="rounded-[2rem] border border-white/5 relative overflow-hidden group min-h-[300px] flex items-end p-8 md:p-12 shadow-2xl">
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: 0.4 }}
+              className="rounded-[2rem] border border-white/5 relative overflow-hidden group min-h-[300px] flex items-end p-8 md:p-12 shadow-2xl"
+            >
               <img
                 src="https://images.unsplash.com/photo-1497215842964-222b430dc094?q=80&w=800&auto=format&fit=crop"
                 alt="Workspace desk"
                 className="absolute inset-0 w-full h-full object-cover grayscale opacity-20 group-hover:scale-105 group-hover:opacity-30 transition-all duration-700 mix-blend-luminosity"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#111111] via-[#111111]/70 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg)] via-[var(--bg)]/70 to-transparent" />
 
               <div className="relative z-10 w-full">
-                <p className="text-[10px] tracking-[0.2em] text-[#e0c4ff]/80 uppercase mb-3 font-bold">
+                <p className="text-[10px] tracking-[0.2em] text-[var(--primary)] uppercase mb-3 font-bold">
                   UBICACIÓN
                 </p>
-                <h4 className="text-2xl md:text-3xl font-bold text-white">
+                <h4 className="text-2xl md:text-3xl font-bold text-[var(--text)]">
                   Maturín, VE
                 </h4>
               </div>
-            </div>
+            </motion.div>
           </div>
           {/* Indicator: Next Section */}
           <div
@@ -763,8 +788,8 @@ export default function Portfolio() {
                 ?.scrollIntoView({ behavior: "smooth", block: "start" })
             }
           >
-            <div className="h-20 w-[1px] bg-linear-to-b from-white/20 to-transparent" />
-            <div className="text-[10px] md:text-xs font-bold uppercase tracking-[0.3em] text-[#e0c4ff]">
+            <div className="h-20 w-[1px] bg-linear-to-b from-[var(--text)]/20 to-transparent" />
+            <div className="text-[10px] md:text-xs font-bold uppercase tracking-[0.3em] text-[var(--primary)]">
               Habilidades
             </div>
           </div>
@@ -782,17 +807,23 @@ export default function Portfolio() {
                 ?.scrollIntoView({ behavior: "smooth", block: "start" })
             }
           >
-            <div className="text-[10px] md:text-xs font-bold uppercase tracking-[0.3em] text-white/40">
+            <div className="text-[10px] md:text-xs font-bold uppercase tracking-[0.3em] text-[var(--text)]/40">
               Formación
             </div>
-            <div className="h-20 w-[1px] bg-linear-to-t from-white/20 to-transparent" />
+            <div className="h-20 w-[1px] bg-linear-to-t from-[var(--text)]/20 to-transparent" />
           </div>
 
-          <div className="text-center mb-16 md:mb-24">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-16 md:mb-24"
+          >
             <h2 className="text-4xl md:text-5xl font-bold tracking-tight">
               Habilidades
             </h2>
-          </div>
+          </motion.div>
 
           {technologiesLoading ? (
             <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
@@ -826,7 +857,8 @@ export default function Portfolio() {
                   <motion.div
                     key={category}
                     initial={{ opacity: 0, y: 30, scale: 0.95 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                    viewport={{ once: true, margin: "-50px" }}
                     transition={{
                       duration: 0.6,
                       delay: index * 0.15,
@@ -834,12 +866,12 @@ export default function Portfolio() {
                       stiffness: 100,
                       damping: 20,
                     }}
-                    className="relative rounded-4xl border border-white/10 bg-[#111111]/40 p-8 shadow-2xl overflow-hidden"
+                    className="relative rounded-4xl border border-[var(--text)]/10 bg-[var(--bg)]/40 p-8 shadow-2xl overflow-hidden"
                   >
-                    <h3 className="text-2xl font-bold mb-2 text-white">
+                    <h3 className="text-2xl font-bold mb-2 text-[var(--text)]">
                       {categoryLabels[category]}
                     </h3>
-                    <p className="text-sm leading-6 text-white/60 mb-6">
+                    <p className="text-sm leading-6 text-[var(--text)]/60 mb-6">
                       {categoryDescriptions[category]}
                     </p>
 
@@ -849,7 +881,8 @@ export default function Portfolio() {
                           <motion.div
                             key={technology.id}
                             initial={{ opacity: 0, x: -20 }}
-                            animate={{ opacity: 1, x: 0 }}
+                            whileInView={{ opacity: 1, x: 0 }}
+                            viewport={{ once: true }}
                             transition={{
                               duration: 0.4,
                               delay: techIndex * 0.08,
@@ -861,10 +894,10 @@ export default function Portfolio() {
                               transition: { duration: 0.2 },
                             }}
                             whileTap={{ scale: 0.98 }}
-                            className="rounded-3xl border border-white/10 bg-white/5 p-4"
+                            className="rounded-3xl border border-[var(--text)]/10 bg-[var(--text)]/5 p-4"
                           >
                             <div className="flex items-center gap-3 min-w-0 mb-3">
-                              <div className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-2xl bg-white/10">
+                              <div className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-2xl bg-[var(--text)]/10">
                                 {technology.icon_url ? (
                                   <img
                                     src={technology.icon_url}
@@ -872,16 +905,16 @@ export default function Portfolio() {
                                     className="h-full w-full object-contain"
                                   />
                                 ) : (
-                                  <span className="text-[10px] uppercase tracking-[0.2em] text-white/50">
+                                  <span className="text-[10px] uppercase tracking-[0.2em] text-[var(--text)]/50">
                                     N/A
                                   </span>
                                 )}
                               </div>
                               <div className="min-w-0">
-                                <p className="truncate text-sm font-semibold text-white">
+                                <p className="truncate text-sm font-semibold text-[var(--text)]">
                                   {technology.name}
                                 </p>
-                                <p className="text-[11px] text-white/50">
+                                <p className="text-[11px] text-[var(--text)]/50">
                                   {formatExperience(
                                     technology.experience_start_date,
                                   )}
@@ -890,16 +923,17 @@ export default function Portfolio() {
                             </div>
 
                             <div className="flex items-center justify-between gap-3 flex-wrap">
-                              <span className="rounded-full bg-[#e0c4ff]/15 px-3 py-1 text-[10px] uppercase tracking-[0.2em] text-[#e0c4ff]">
+                              <span className="rounded-full bg-[var(--primary)]/15 px-3 py-1 text-[10px] uppercase tracking-[0.2em] text-[var(--primary)]">
                                 {levelLabels[technology.level]}
                               </span>
-                              <div className="w-full sm:w-2/3 h-2 rounded-full bg-white/10 overflow-hidden">
+                              <div className="w-full sm:w-2/3 h-2 rounded-full bg-[var(--text)]/10 overflow-hidden">
                                 <motion.div
                                   initial={{ width: 0 }}
-                                  animate={{
+                                  whileInView={{
                                     width:
                                       levelBarStyles[technology.level].width,
                                   }}
+                                  viewport={{ once: true }}
                                   transition={{
                                     duration: 1,
                                     delay: 0.5 + techIndex * 0.1,
@@ -934,28 +968,46 @@ export default function Portfolio() {
                 ?.scrollIntoView({ behavior: "smooth", block: "start" })
             }
           >
-            <div className="text-[10px] md:text-xs font-bold uppercase tracking-[0.3em] text-white/40">
+            <div className="text-[10px] md:text-xs font-bold uppercase tracking-[0.3em] text-[var(--text)]/40">
               Habilidades
             </div>
-            <div className="h-20 w-[1px] bg-linear-to-t from-white/20 to-transparent" />
+            <div className="h-20 w-[1px] bg-linear-to-t from-[var(--text)]/20 to-transparent" />
           </div>
 
-          <div className="text-center mb-16 md:mb-24">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-16 md:mb-24"
+          >
             <h2 className="text-4xl md:text-5xl font-bold tracking-tight">
               Proyectos
             </h2>
-            <p className="text-white/60 mt-4 max-w-2xl mx-auto">
+            <p className="text-[var(--text)]/60 mt-4 max-w-2xl mx-auto">
               Explora mi trabajo más reciente y descubre cómo he aplicado
               diferentes tecnologías para crear soluciones innovadoras
             </p>
-          </div>
+          </motion.div>
 
-          <div className="block md:hidden">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="block md:hidden"
+          >
             <ProjectCarouselMobile />
-          </div>
-          <div className="hidden md:block">
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.98 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="hidden md:block"
+          >
             <ProjectCarousel />
-          </div>
+          </motion.div>
         </div>
         <div className="h-[40vh]" />
 
@@ -965,36 +1017,46 @@ export default function Portfolio() {
         >
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24">
             {/* Columna Izquierda: Filosofía y Resumen */}
-            <div className="lg:col-span-5 space-y-12">
+            <motion.div
+              initial={{ opacity: 0, x: -50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
+              className="lg:col-span-5 space-y-12"
+            >
               <div className="space-y-6">
-                <p className="text-[#e0c4ff] text-xs uppercase tracking-[0.4em] font-bold">
-                  Philosophy
+                <p className="text-[var(--primary)] text-xs uppercase tracking-[0.4em] font-bold">
+                  Filosofía
                 </p>
-                <h2 className="text-6xl md:text-8xl font-bold text-white leading-[1.05] tracking-tight">
-                  Crafting Digital <br />
-                  <span className="text-white/30 italic">Solitude.</span>
+                <h2 className="text-5xl md:text-6xl font-bold text-[var(--text)] leading-[1.05] tracking-tight">
+                  Crafting <br />
+                  <span className="text-[var(--text)]/30 italic">
+                    Performance.
+                  </span>
+                  <br />
+                  through refined code
                 </h2>
               </div>
 
               <div className="space-y-8 max-w-lg">
-                <p className="text-white/60 text-lg leading-relaxed font-light">
-                  En un mundo saturado de ruido digital, me dedico a curar
-                  interfaces que respiran. Mi enfoque fusiona una estética
-                  vanguardista con una precisión técnica absoluta, creando
-                  experiencias que se sienten tan íntimas y refinadas como una
-                  galería de arte privada.
+                <p className="text-[var(--text)]/60 text-lg leading-relaxed font-light">
+                  Entiendo el desarrollo como un equilibrio perfecto entre
+                  potencia y sutileza. No se trata solo de construir funciones,
+                  sino de esculpir algoritmos eficientes que garanticen una
+                  velocidad asombrosa y una fluidez impecable en cada píxel,
+                  elevando el código a una forma de arte técnico.
                 </p>
-                <div className="pt-4 border-l border-white/10 pl-8">
-                  <p className="text-white/40 italic font-light text-md leading-relaxed">
-                    "El gran diseño no es lo que se ve a primera vista, sino
-                    cómo respira el espacio infinito que existe entre cada
-                    elemento."
+                <div className="pt-4 border-l border-[var(--text)]/10 pl-8">
+                  <p className="text-[var(--text)]/40 italic font-light text-md leading-relaxed">
+                    "La verdadera optimización no es solo reducir milisegundos,
+                    sino crear una armonía invisible donde la elegancia del
+                    código impulsa una experiencia excepcional."
                   </p>
                 </div>
               </div>
 
               <motion.div
-                className="relative group rounded-3xl overflow-hidden border border-white/10 aspect-video shadow-2xl bg-white/5"
+                className="relative group rounded-3xl overflow-hidden border border-[var(--text)]/10 aspect-video shadow-2xl bg-[var(--text)]/5"
                 whileHover={{ scale: 1.02 }}
                 transition={{ duration: 0.6 }}
               >
@@ -1003,203 +1065,80 @@ export default function Portfolio() {
                   alt="Minimalist Architecture"
                   className="w-full h-full object-cover grayscale opacity-40 group-hover:opacity-80 group-hover:grayscale-0 transition-all duration-1000"
                 />
-                <div className="absolute inset-0 bg-linear-to-t from-[#111111] via-transparent to-transparent opacity-60" />
+                <div className="absolute inset-0 bg-linear-to-t from-[var(--bg)] via-transparent to-transparent opacity-60" />
               </motion.div>
-            </div>
+            </motion.div>
 
             {/* Columna Derecha: Formulario y Enlaces */}
-            <div className="lg:col-span-7 flex flex-col">
-              <div className="bg-[#111111]/40 backdrop-blur-3xl border border-white/10 rounded-3xl p-8 md:p-16 space-y-12 shadow-[0_0_100px_rgba(36,0,70,0.2)]">
-                <div className="space-y-4">
-                  <h3 className="text-4xl font-bold text-white tracking-tight">
-                    Initiate Dialogue
-                  </h3>
-                  <div className="flex items-center gap-3">
-                    <span className="w-2 h-2 rounded-full bg-[#e0c4ff] animate-pulse shadow-[0_0_10px_rgba(224,196,255,1)]" />
-                    <p className="text-white/30 text-[10px] uppercase tracking-[0.2em] font-bold">
-                      Available for select commissions 2024
-                    </p>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  <div className="space-y-3">
-                    <label className="text-[10px] uppercase tracking-widest font-bold text-white/30 ml-2">
-                      Identidad
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="Tu nombre"
-                      value={contactForm.name}
-                      onChange={(e) =>
-                        setContactForm((prev) => ({
-                          ...prev,
-                          name: e.target.value,
-                        }))
-                      }
-                      className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white placeholder:text-white/20 focus:outline-hidden focus:border-[#e0c4ff]/50 focus:bg-white/10 transition-all duration-300"
-                    />
-                  </div>
-                  <div className="space-y-3">
-                    <label className="text-[10px] uppercase tracking-widest font-bold text-white/30 ml-2">
-                      Asunto
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="Asunto"
-                      value={contactForm.subject}
-                      onChange={(e) =>
-                        setContactForm((prev) => ({
-                          ...prev,
-                          subject: e.target.value,
-                        }))
-                      }
-                      className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 text-white placeholder:text-white/20 focus:outline-hidden focus:border-[#e0c4ff]/50 focus:bg-white/10 transition-all duration-300"
-                    />
-                  </div>
-                  <div className="col-span-1 md:col-span-2 space-y-3">
-                    <label className="text-[10px] uppercase tracking-widest font-bold text-white/30 ml-2">
-                      Mensaje
-                    </label>
-                    <textarea
-                      rows={5}
-                      placeholder="Describe tu propuesta..."
-                      value={contactForm.message}
-                      onChange={(e) =>
-                        setContactForm((prev) => ({
-                          ...prev,
-                          message: e.target.value,
-                        }))
-                      }
-                      className="w-full bg-white/5 border border-white/10 rounded-3xl px-6 py-5 text-white placeholder:text-white/20 focus:outline-hidden focus:border-[#e0c4ff]/50 focus:bg-white/10 transition-all duration-300 resize-none"
-                    />
-                  </div>
-                </div>
-
-                <div className="relative w-full md:w-auto">
-                  <motion.button
-                    onClick={handleSendMessage}
-                    className="group relative w-full md:w-auto px-12 py-5 bg-[#240046] hover:bg-[#2d0058] text-white rounded-2xl flex items-center justify-center gap-4 transition-all duration-500 overflow-hidden"
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                  >
-                    <div className="absolute inset-0 bg-linear-to-r from-[#e0c4ff]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                    <span className="relative z-10 font-bold tracking-widest uppercase text-xs">
-                      Send Message
-                    </span>
-                    <ArrowUpRight
-                      size={18}
-                      className="relative z-10 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform"
-                    />
-                  </motion.button>
-
-                  <AnimatePresence>
-                    {showEmailPicker && (
-                      <motion.div
-                        initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                        className="absolute bottom-full mb-4 left-0 w-full md:w-64 bg-[#111111]/90 backdrop-blur-2xl border border-white/10 rounded-2xl p-2 shadow-2xl z-50 overflow-hidden"
-                      >
-                        <div className="text-[9px] uppercase tracking-widest font-bold text-white/30 px-3 py-2 border-b border-white/5">
-                          Escoge tu servicio
-                        </div>
-                        <button
-                          onClick={() => openEmailProvider("gmail")}
-                          className="flex items-center gap-3 w-full px-4 py-3 text-left text-xs font-medium text-white/70 hover:bg-white/5 hover:text-white transition-all rounded-lg"
-                        >
-                          <span className="w-2 h-2 rounded-full bg-red-500" />{" "}
-                          Gmail
-                        </button>
-                        <button
-                          onClick={() => openEmailProvider("outlook")}
-                          className="flex items-center gap-3 w-full px-4 py-3 text-left text-xs font-medium text-white/70 hover:bg-white/5 hover:text-white transition-all rounded-lg"
-                        >
-                          <span className="w-2 h-2 rounded-full bg-blue-500" />{" "}
-                          Outlook
-                        </button>
-                        <button
-                          onClick={() => openEmailProvider("native")}
-                          className="flex items-center gap-3 w-full px-4 py-3 text-left text-xs font-medium text-white/70 hover:bg-white/5 hover:text-white transition-all rounded-lg"
-                        >
-                          <span className="w-2 h-2 rounded-full bg-[#e0c4ff]" />{" "}
-                          Aplicación por defecto
-                        </button>
-                        {/* <div className="h-px bg-white/5 my-1" /> */}
-                        {/* <button onClick={() => openEmailProvider("copy")} className="flex items-center gap-3 w-full px-4 py-3 text-left text-xs font-medium text-white/70 hover:bg-white/5 hover:text-white transition-all rounded-lg">
-                            <span className="w-2 h-2 rounded-full bg-white/20" /> Copiar mi Email
-                          </button> */}
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-              </div>
+            <motion.div
+              initial={{ opacity: 0, x: 50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
+              className="lg:col-span-7 flex flex-col"
+            >
+              <ContactForm />
 
               <div className="grid grid-cols-1  sm:grid-cols-3 gap-12 mt-20 px-8">
                 <div className="space-y-4">
-                  <p className="text-[10px] uppercase tracking-[0.3em] font-bold text-[#e0c4ff]">
-                    Coordinates
+                  <p className="text-[10px] uppercase tracking-[0.3em] font-bold text-[var(--primary)]">
+                    Coordenadas
                   </p>
-                  <div className="text-white/50 text-sm space-y-1">
+                  <div className="text-[var(--text)]/50 text-sm space-y-1">
                     <p>Maturín, Venezuela</p>
                     <p>GMT -4</p>
                   </div>
                 </div>
                 <div className="space-y-4">
-                  <p className="text-[10px] uppercase tracking-[0.3em] font-bold text-[#e0c4ff]">
-                    Networks
+                  <p className="text-[10px] uppercase tracking-[0.3em] font-bold text-[var(--primary)]">
+                    Redes
                   </p>
-                  <div className="flex flex-col gap-2 text-white/50 text-sm">
+                  <div className="flex flex-col gap-2 text-[var(--text)]/50 text-sm">
                     <a
                       href="https://www.linkedin.com/in/luis-campos-13034b200"
                       target="_blank"
-                      className="hover:text-white transition-colors"
+                      className="hover:text-[var(--text)] transition-colors"
                     >
                       LinkedIn
                     </a>
                     <a
                       href="https://github.com/RuisuCode"
                       target="_blank"
-                      className="hover:text-white transition-colors"
+                      className="hover:text-[var(--text)] transition-colors"
                     >
                       GitHub
                     </a>
                   </div>
                 </div>
-                <div className="space-y-4">
-                  <p className="text-[10px] uppercase tracking-[0.3em] font-bold text-[#e0c4ff]">
-                    Direct
+                <div className="flex flex-col gap-2 ">
+                  <p className="text-[10px] uppercase tracking-[0.3em] font-bold text-[var(--primary)]">
+                    Directo
                   </p>
                   <a
                     href="mailto:theboss7lol@gmail.com"
-                    className="text-white/50 text-sm hover:text-white transition-all wrap-break-words"
+                    className="text-[var(--text)]/50 text-sm hover:text-[var(--text)] transition-all wrap-break-words"
                   >
                     theboss7lol@gmail.com
                   </a>
+                  <a
+                    href="/documents/CV%202.5%20Luis%20Alejandro%20Campos.pdf"
+                    download
+                      className="text-[var(--text)]/50 text-sm hover:text-[var(--text)] transition-all wrap-break-words"
+                  >
+                    Descargar mi CV
+                  </a>
                 </div>
               </div>
-            </div>
+            </motion.div>
           </div>
         </div>
 
-        <footer className="w-full border-t border-white/5 py-12 px-6 md:px-0 flex flex-col md:flex-row justify-between items-center gap-8 mt-20">
-          <p className="text-white/20 text-[10px] uppercase tracking-widest font-medium text-center md:text-left">
-            © {new Date().getFullYear()} Luis Campos · Built with Atmospheric
-            Depth
+        <footer className="w-full border-t border-[var(--text)]/5 py-12 px-6 md:px-0 flex flex-col md:flex-row justify-between items-center gap-8 mt-20">
+          <p className="text-[var(--text)]/20 text-[10px] uppercase tracking-widest font-medium text-center md:text-left">
+            © {new Date().getFullYear()} Luis Campos · Diseñado y desarrollado por mí mismo
           </p>
-          <div className="flex gap-10 text-white/20 text-[10px] uppercase tracking-widest font-bold">
-            <a href="#" className="hover:text-[#e0c4ff] transition-colors">
-              Archives
-            </a>
-            <a href="#" className="hover:text-[#e0c4ff] transition-colors">
-              Colophon
-            </a>
-            <a href="#" className="hover:text-[#e0c4ff] transition-colors">
-              Legal
-            </a>
-          </div>
+    
         </footer>
-        {/* <div className="h-[40vh]" /> */}
       </motion.div>
 
       {/* Expanded Bio Overlay */}
@@ -1208,12 +1147,12 @@ export default function Portfolio() {
           <motion.div
             layoutId="bio-card"
             className={[
-              "fixed top-4 bottom-4 left-4 right-4 md:top-8 md:bottom-8 md:inset-x-12 lg:inset-x-28 z-50 rounded-[2rem]",
-              "flex flex-col justify-center p-6 md:p-12 lg:p-16 overflow-hidden",
+              "fixed top-4 bottom-4 left-4 right-4 md:top-8 md:bottom-8 md:inset-x-12 lg:inset-x-28 z-50 rounded-3xl",
+              "flex flex-col lg:justify-center p-6 md:p-12 lg:p-16 overflow-auto ",
               "backdrop-blur-3xl shadow-2xl border",
               isDarkMode
                 ? "bg-[#111111]/40 text-white border-white/10"
-                : "bg-white/40 text-[#0f0f0f] border-black/10",
+                : "bg-[var(--bg)] text-[var(--text)] border-[var(--text)]/10",
             ].join(" ")}
           >
             {/* Top-left BACK action */}
@@ -1237,16 +1176,16 @@ export default function Portfolio() {
               <span className="text-[10px] tracking-[0.2em] font-bold uppercase whitespace-nowrap">
                 BACK
               </span>
-              <div className="w-1.5 h-1.5 rounded-full bg-[#e0c4ff] shadow-[0_0_8px_rgba(224,196,255,0.6)]" />
+              <div className="w-1.5 h-1.5 rounded-full bg-[var(--primary)] shadow-[0_0_8px_var(--primary)]" />
             </motion.button>
 
-            <div className="relative w-full h-full max-w-5xl mx-auto flex flex-col lg:flex-row gap-8 lg:gap-16 items-center lg:items-start justify-center">
+            <div className="relative w-full md:h-full h-fit  max-w-5xl mx-auto flex flex-col-reverse lg:flex-row gap-8 lg:gap-16 items-center lg:items-start lg:justify-center pt-20 lg:pt-0">
               {/* Left side */}
               <motion.div
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.2 }}
-                className="flex-1 relative md:pl-12 lg:pl-16 w-full mt-4 lg:mt-0 flex flex-col justify-center"
+                className="flex-1 relative md:pl-12 lg:pl-16 w-full mt-4 lg:mt-0 flex flex-col lg:justify-center"
               >
                 <div className="absolute left-0 top-0 bottom-0 hidden md:flex items-center">
                   <span className="transform -rotate-90 origin-center text-[10px] tracking-[0.3em] uppercase opacity-30 font-bold whitespace-nowrap -ml-28">
@@ -1254,37 +1193,52 @@ export default function Portfolio() {
                   </span>
                 </div>
 
-                <h2 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-light leading-[1.1] mb-6 lg:mb-10 text-center lg:text-left">
+                <h2 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-light leading-[1.1] mb-4 lg:mb-6 text-center lg:text-left">
                   Crafting <br className="hidden lg:block" />
-                  <span className="italic text-[#e0c4ff]">Atmosphere</span>{" "}
+                  <span className="italic text-[var(--primary)]">
+                    Performance
+                  </span>{" "}
                   <span className="lg:hidden"></span>
                   <br className="hidden lg:block" />
-                  through digital <br className="hidden lg:block" />
-                  craft.
+                  through refined <br className="hidden lg:block" />
+                  code.
                 </h2>
 
                 <div className="space-y-3 lg:space-y-6 text-sm lg:text-lg opacity-70 font-light max-w-2xl text-center lg:text-left mx-auto lg:mx-0">
                   <p>
-                    Luis Campos is a multidisciplinary designer and engineer
-                    focused on the intersection of minimalist aesthetics and
-                    functional complexity. With extensive experience navigating
-                    the nebulous space between brand identity and high-end
-                    digital interfaces.
+                    Soy un <strong>Desarrollador Full Stack</strong>
+                    (T.S.U. en Informática) con una sólida trayectoria que
+                    combina la rigurosidad académica con la ejecución práctica
+                    en entornos de desarrollo profesional, tanto presenciales
+                    como remotos. Me especializo en el ecosistema moderno de
+                    JavaScript y TypeScript, con un dominio avanzado de
+                    <strong>React</strong> y <strong>Next.js</strong> para el
+                    frontend, y<strong> Node.js (Express, AdonisJS) </strong>
+                    para la arquitectura de servidores.
                   </p>
                   <p className="hidden md:block">
-                    Believing that the best design isn't just seen but felt,
-                    Luis employs a philosophy of &quot;intentional
-                    subtraction.&quot; Every pixel, transition, and typographic
-                    choice is measured against its necessity.
+                    Mi enfoque principal es la creación de{" "}
+                    <strong>productos digitales</strong>
+                    que no solo sean funcionalmente robustos, sino también
+                    altamente escalables y centrados en la experiencia del
+                    usuario. Experto en la construcción de interfaces modernas y
+                    dinámicas utilizando <strong>Tailwind CSS</strong>,{" "}
+                    <strong>Radix UI</strong> y <strong>Framer Motion</strong>
+                    para garantizar animaciones fluidas y diseños totalmente
+                    responsivos.
                   </p>
                   <p>
-                    Currently based in Venezuela, he collaborates with
-                    forward-thinking studios to build the next generation of the
-                    editorial web.
+                    <strong>Actualmente</strong>, me encuentro expandiendo
+                    activamente mi aprendizaje en nuevas tecnologías del mercado
+                    y afinando mis competencias en otros idiomas. Esto me
+                    permite mantenerme a la vanguardia de las demandas globales
+                    y colaborar eficazmente en{" "}
+                    <strong>equipos internacionales</strong> de alto
+                    rendimiento.
                   </p>
                 </div>
 
-                <div className="mt-8 lg:mt-12 flex justify-center lg:justify-start">
+                <div className="my-8 lg:mt-12 flex justify-center lg:justify-start">
                   <button
                     onClick={() => {
                       setIsBioExpanded(false);
@@ -1294,7 +1248,7 @@ export default function Portfolio() {
                           ?.scrollIntoView({ behavior: "smooth" });
                       }, 500);
                     }}
-                    className="text-[10px] tracking-[0.3em] uppercase font-bold flex items-center gap-4 hover:text-[#e0c4ff] transition-colors"
+                    className="text-[10px] tracking-[0.3em] uppercase font-bold flex items-center gap-4 hover:text-[var(--primary)] transition-colors"
                   >
                     DISCOVER PROJECTS
                     <span className="h-px w-12 bg-current" />
@@ -1307,15 +1261,15 @@ export default function Portfolio() {
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.3 }}
-                className="w-full max-w-[200px] lg:max-w-[320px] flex flex-col items-center lg:items-start shrink-0"
+                className="w-full max-w-[280px] lg:max-w-[320px] flex flex-col items-center lg:items-start shrink-0 mt-4 lg:mt-0"
               >
-                <div className="w-full aspect-4/5 bg-white/5 rounded-2xl overflow-hidden mb-8 relative border border-white/5 shadow-2xl">
+                <div className="w-full aspect-4/5 bg-[var(--text)]/5 rounded-2xl overflow-hidden mb-8 relative border border-[var(--text)]/5 shadow-2xl">
                   <img
-                    src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=800&auto=format&fit=crop"
+                    src={profile}
                     alt="Profile"
                     className="object-cover w-full h-full grayscale opacity-80 mix-blend-luminosity"
                   />
-                  <div className="absolute inset-0 bg-linear-to-t from-[#111111]/40 to-transparent" />
+                  <div className="absolute inset-0 bg-linear-to-t from-[var(--bg)]/40 to-transparent" />
                 </div>
 
                 <div className="w-full space-y-8 px-2">
@@ -1323,45 +1277,73 @@ export default function Portfolio() {
                     <p className="text-[10px] tracking-[0.2em] uppercase opacity-40 mb-2 font-bold">
                       Location
                     </p>
-                    <p className="text-sm font-medium text-white/90">Venezuela, VE / GMT-4</p>
+                    <p className="text-sm font-medium text-[var(--text)]/90">
+                      Venezuela, VE / GMT-4
+                    </p>
                   </div>
 
                   <div className="text-center lg:text-left">
                     <p className="text-[10px] tracking-[0.2em] uppercase opacity-40 mb-2 font-bold">
                       Focus
                     </p>
-                    <p className="text-sm font-medium text-white/90">Full Stack & AI Cloud Engineer</p>
+                    <p className="text-sm font-medium text-[var(--text)]/90">
+                      Full Stack & AI Cloud Engineer
+                    </p>
                   </div>
 
-                  <div className="text-center lg:text-left">
-                    <p className="text-[10px] tracking-[0.2em] uppercase opacity-40 mb-3 font-bold">
-                      Networks
-                    </p>
-                    <div className="flex flex-col gap-2">
-                      <a 
-                        href="https://www.linkedin.com/in/luis-campos-13034b200" 
-                        target="_blank" 
-                        className="text-xs font-semibold text-[#e0c4ff] hover:text-white transition-colors flex items-center justify-center lg:justify-start gap-2"
-                      >
-                        LinkedIn <ArrowUpRight size={12} />
-                      </a>
-                      <a 
-                        href="https://github.com/RuisuCode" 
-                        target="_blank" 
-                        className="text-xs font-semibold text-[#e0c4ff] hover:text-white transition-colors flex items-center justify-center lg:justify-start gap-2"
-                      >
-                        GitHub <ArrowUpRight size={12} />
-                      </a>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="text-center lg:text-left">
+                      <p className="text-[10px] tracking-[0.2em] uppercase opacity-40 mb-3 font-bold">
+                        Networks
+                      </p>
+                      <div className="flex flex-col gap-2">
+                        <a
+                          href="https://www.linkedin.com/in/luis-campos-13034b200"
+                          target="_blank"
+                          className="text-xs font-semibold text-[var(--primary)] hover:text-[var(--text)] transition-colors flex items-center justify-center lg:justify-start gap-2"
+                        >
+                          LinkedIn <ArrowUpRight size={12} />
+                        </a>
+                        <a
+                          href="https://github.com/RuisuCode"
+                          target="_blank"
+                          className="text-xs font-semibold text-[var(--primary)] hover:text-[var(--text)] transition-colors flex items-center justify-center lg:justify-start gap-2"
+                        >
+                          GitHub <ArrowUpRight size={12} />
+                        </a>
+                      </div>
+                    </div>
+
+                    <div className="text-center lg:text-left">
+                      <p className="text-[10px] tracking-[0.2em] uppercase opacity-40 mb-3 font-bold">
+                        Languages
+                      </p>
+                      <div className="flex flex-col gap-2">
+                        <p className="text-xs font-semibold text-[var(--text)]/90">
+                          Español{" "}
+                          <span className="text-[10px] opacity-40 font-normal">
+                            (Nativo)
+                          </span>
+                        </p>
+                        <p className="text-xs font-semibold text-[var(--text)]/90">
+                          Inglés{" "}
+                          <span className="text-[10px] opacity-40 font-normal">
+                            (B1)
+                          </span>
+                        </p>
+                      </div>
                     </div>
                   </div>
 
-                  <div className="text-center lg:text-left pt-4 border-t border-white/5">
+                  <div className="text-center lg:text-left pt-4 border-t border-[var(--text)]/5">
                     <p className="text-[10px] tracking-[0.2em] uppercase opacity-40 mb-2 font-bold">
                       Status
                     </p>
                     <div className="flex items-center justify-center lg:justify-start gap-2">
                       <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse shadow-[0_0_8px_rgba(34,197,94,0.6)]" />
-                      <p className="text-xs font-medium text-white/60 italic">Available for select projects</p>
+                      <p className="text-xs font-medium text-[var(--text)]/60 italic">
+                        Disponible
+                      </p>
                     </div>
                   </div>
                 </div>

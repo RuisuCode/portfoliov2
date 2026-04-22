@@ -139,7 +139,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
               <div className="absolute top-6 right-8 z-20">
                 <motion.button
                   onClick={onClose}
-                  className="w-12 h-12 rounded-full bg-white/5 backdrop-blur-xl border border-white/10 flex items-center justify-center text-white/50 hover:text-white hover:bg-white/10 transition-all duration-300"
+                  className="w-12 h-12 rounded-full bg-[var(--text)]/5 backdrop-blur-xl border border-[var(--text)]/10 flex items-center justify-center text-[var(--text)]/50 hover:text-[var(--text)] hover:bg-[var(--text)]/10 transition-all duration-300"
                   whileHover={{ scale: 1.1, rotate: 90 }}
                   whileTap={{ scale: 0.9 }}
                 >
@@ -161,15 +161,15 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
                         )
                       : "Fecha por definir"}
                   </p>
-                  <h1 className="text-4xl md:text-7xl font-bold text-white mb-4">
+                  <h1 className="text-4xl md:text-7xl font-bold text-[var(--text)] mb-4">
                     {project.name}
                   </h1>
 
                   {/* Nombre de la empresa */}
                   {project.company_name && (
-                    <p className="text-white/60 text-lg mb-8">
+                    <p className="text-[var(--text)]/60 text-lg mb-8">
                       Desarrollado para{" "}
-                      <span className="text-[#e0c4ff]">
+                      <span className="text-[var(--primary)]">
                         {project.company_name}
                       </span>
                     </p>
@@ -301,8 +301,8 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
                               }}
                               className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
                                 index === currentImageIndex
-                                  ? "bg-[#e0c4ff] w-6"
-                                  : "bg-white/30 hover:bg-white/50"
+                                  ? "bg-[var(--primary)] w-6"
+                                  : "bg-[var(--text)]/30 hover:bg-[var(--text)]/50"
                               }`}
                               whileHover={{ scale: 1.2 }}
                               whileTap={{ scale: 0.8 }}
@@ -320,7 +320,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
                   {/* Columna 1: Tecnologías */}
                   <div className="w-full md:w-1/4">
                     <div className="border-l-3    border-[#e0c4ff] ">
-                      <h3 className="text-md uppercase px-5 tracking-widest font-semibold text-white/70 mb-4">
+                      <h3 className="text-md uppercase px-5 tracking-widest font-semibold text-[var(--text)]/70 mb-4">
                         Tecnologías
                       </h3>
                     </div>
@@ -338,7 +338,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
                                 className="w-6 h-6 object-contain filter brightness-100"
                               />
                             ) : (
-                              <span className="text-[8px] uppercase tracking-widest text-white/50 font-bold">
+                              <span className="text-[8px] uppercase tracking-widest text-[var(--text)]/50 font-bold">
                                 {tech.name.slice(0, 2)}
                               </span>
                             )}
@@ -347,7 +347,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
                             <p className="text-white font-medium text-md">
                               {tech.name}
                             </p>
-                            <p className="text-white/60 uppercase tracking-widest text-xs">
+                            <p className="text-[var(--text)]/60 uppercase tracking-widest text-xs">
                               {tech.category}
                             </p>
                           </div>
@@ -364,7 +364,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
                       </h3>
                     </div>
                     <div className="p-4 rounded-xl">
-                      <p className="text-white/80 leading-relaxed text-left whitespace-pre-line">
+                      <p className="text-[var(--text)]/80 leading-relaxed text-left whitespace-pre-line">
                         {project.description
                           ?.split(". ")
                           .reduce((acc: string[], sentence, index) => {
@@ -384,7 +384,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
                   {/* Columna 3: Enlaces y redes sociales */}
                   <div className="w-full md:w-1/4 md:px-8">
                     <div className="border-l-3   border-[#e0c4ff] ">
-                      <h3 className="text-md uppercase px-5 tracking-widest font-semibold text-white/70 mb-4">
+                      <h3 className="text-md uppercase px-5 tracking-widest font-semibold text-[var(--text)]/70 mb-4">
                         Enlaces y Redes
                       </h3>
                     </div>
@@ -455,7 +455,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
                       <div className="mt-0 p-6 rounded-2xl bg-black/40 backdrop-blur-md border border-white/5 shadow-2xl relative overflow-hidden group">
                         <div className="absolute inset-0 bg-linear-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
-                        <p className="text-[10px] uppercase tracking-[0.2em] font-bold text-white/30 mb-4">
+                        <p className="text-[10px] uppercase tracking-[0.2em] font-bold text-[var(--text)]/30 mb-4">
                           Project Status
                         </p>
 
@@ -493,7 +493,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
                                 <div
                                   className={`w-2.5 h-2.5 rounded-full ${config.color} ${config.glow} animate-pulse`}
                                 />
-                                <span className="text-xl font-semibold text-white/90 tracking-tight">
+                                <span className="text-xl font-semibold text-[var(--text)]/90 tracking-tight">
                                   {config.label}
                                 </span>
                               </>
