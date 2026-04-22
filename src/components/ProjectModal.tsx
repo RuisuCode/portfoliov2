@@ -1,11 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import {
-  X,
-  ChevronLeft,
-  ChevronRight,
-  ArrowUpRight,
-} from "lucide-react";
+import { X, ChevronLeft, ChevronRight, ArrowUpRight } from "lucide-react";
 import { supabase } from "../../utils/supabase";
 import type { Project } from "../types/project";
 import Lightbox from "yet-another-react-lightbox";
@@ -28,18 +23,11 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
   const [direction, setDirection] = useState(0);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const [projectImages, setProjectImages] = useState<string[]>([]);
-  const [projectLinkDeploy, setProjectLinkDeploy] = useState<string | null>(
-    null,
-  );
+  const projectLinkDeploy =
+    project.links?.find((link) => link.label === "deploy")?.url ?? null;
 
   // Cargar imágenes del bucket de Supabase
   useEffect(() => {
-    if (project.links.find((link) => link.label === "deploy")) {
-      setProjectLinkDeploy(
-        project.links.find((link) => link.label === "deploy").url,
-      );
-    }
-
     const loadProjectImages = async () => {
       try {
         if (project.bucket_folder) {
@@ -410,8 +398,8 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
                         </motion.a>
                       )}
                       <div className="flex flex-row flex-wrap gap-3">
-                        {project.links
-                          ?.filter((link) => link.label !== "deploy")
+                        {(project.links ?? [])
+                          .filter((link) => link.label !== "deploy")
                           .map((link, i) => {
                             const iconMap: Record<string, string> = {
                               instagram:
