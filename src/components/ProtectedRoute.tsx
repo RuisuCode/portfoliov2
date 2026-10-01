@@ -18,5 +18,5 @@ export function ProtectedRoute() {
     );
   }
 
-  return session ? <Outlet /> : <Navigate to="/admin/login" replace />;
+  return session ? <Outlet /> : <Navigate to="/" replace />;
 }
