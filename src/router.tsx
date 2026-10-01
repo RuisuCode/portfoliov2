@@ -13,7 +13,7 @@ export const router = createBrowserRouter([
     element: <Portfolio />,
   },
   {
-    path: "/admin/login",
+    path: "/login",
     element: <LoginAdmin />,
   },
   {
